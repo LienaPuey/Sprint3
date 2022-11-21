@@ -81,15 +81,21 @@ function buy(id) {
 }
 
 // Exercise 2
-function cleanCart(cartList) {
+function cleanCart() {
     while (cartList.length > 0) {
         cartList.pop();
     }
+    console.log(cartList);
 }
 
 // Exercise 3
 function calculateTotal() {
     // Calculate total price of the cart using the "cartList" array
+    for(i=0; i < cartList.length; i++){
+        var precio = cartList[i].price;
+        total += precio;
+    }
+    console.log(total);
 }
 
 // Exercise 4
