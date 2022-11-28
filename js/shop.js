@@ -100,21 +100,18 @@ function calculateTotal() {
 
 // Exercise 4
 function generateCart() {
-    cartListQuantity = [...cartList];
-    cartListQuantity.forEach((item) => {
-        item.quantity = 1;        
-    }); 
+    var itemIdQuantityMap = cartList.reduce((acc,item)=> {
+        if(acc[item.id] !== undefined){ 
+            acc[item.id].quantity +=1;
+        }else {
+            acc[item.id] = {...item, quantity: 1};
+        }
+        return acc;
+    }, {});
 
+    cart = Object.values(itemIdQuantityMap);
     
-    // for(var i = 0; i < cartListQuantity.length; i++){
-    //     let index = cartListQuantity[i].id;
-    //     var item = cartListQuantity.find((product) => product.id === index);
-    //     if(cartListQuantity.some((item) => item.id == index)){
-    //         item.quantity ++;
-    //         cart.push(item);
-    //     }
-    // }
-    // console.log(cart);
+    console.log(cart);
     // Using the "cartlist" array that contains all the items in the shopping cart, 
     // generate the "cart" array that does not contain repeated items, instead each item of this array "cart" shows the quantity of product.
 }
@@ -122,6 +119,15 @@ function generateCart() {
 
 // Exercise 5
 function applyPromotionsCart() {
+    // const discountedProduct = cart.map(function(item){
+    //     if (item.offer){
+    //        return {...item, 
+    //         subtotalWithDiscount}
+    //     }
+    //     return item;
+    // });
+
+
     // Apply promotions to each item in the array "cart"
 }
 
