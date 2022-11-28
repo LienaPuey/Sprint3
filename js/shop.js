@@ -100,22 +100,25 @@ function calculateTotal() {
 
 // Exercise 4
 function generateCart() {
-    for(var i = 0; i < cartList.length; i++){
-        let index = cartList[i].id;
-        var item = cartList.find((product) => product.id === index);
-        if(cart.some((item) => item.id == index)){
-            console.log("item con id " + index +" repetido")
-        }else {
-            cart.push({
-                ...item,
-                quantity:1
-            });
-        }
-    }
-    console.log(cart);
+    cartListQuantity = [...cartList];
+    cartListQuantity.forEach((item) => {
+        item.quantity = 1;        
+    }); 
+
+    
+    // for(var i = 0; i < cartListQuantity.length; i++){
+    //     let index = cartListQuantity[i].id;
+    //     var item = cartListQuantity.find((product) => product.id === index);
+    //     if(cartListQuantity.some((item) => item.id == index)){
+    //         item.quantity ++;
+    //         cart.push(item);
+    //     }
+    // }
+    // console.log(cart);
     // Using the "cartlist" array that contains all the items in the shopping cart, 
     // generate the "cart" array that does not contain repeated items, instead each item of this array "cart" shows the quantity of product.
 }
+
 
 // Exercise 5
 function applyPromotionsCart() {
