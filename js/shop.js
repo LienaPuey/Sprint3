@@ -119,15 +119,22 @@ function generateCart() {
 
 // Exercise 5
 function applyPromotionsCart() {
-    // const discountedProduct = cart.map(function(item){
-    //     if (item.offer){
-    //        return {...item, 
-    //         subtotalWithDiscount}
-    //     }
-    //     return item;
-    // });
+   for (var i = 0; i < cart.length; i ++) {
+        const precio = cart[i].price;
+        const oferta = cart[i].offer.percent;
+        const cantidad = cart[i].quantity;
+        const descuento = ((precio * cantidad) - precio * cantidad * oferta /100);
+        if(cart[i].id ==1 && cart[i].quantity >=3){
 
+            cart[i].subtotalWithDiscount = descuento;
 
+        }else if (cart[i].id == 3 && cart[i].quantity >=10){
+
+            cart[i].subtotalWithDiscount = descuento;
+        }
+
+    }
+    console.log(cart);
     // Apply promotions to each item in the array "cart"
 }
 
