@@ -231,7 +231,7 @@ function addToCart(id) {
         }
     }
     applyPromotionsCart();
-    document.getElementById("count_product").innerHTML;
+    document.getElementById("count_product").innerHTML;//cambiar el counter
 
     
     console.log(cart);
@@ -243,7 +243,7 @@ function addToCart(id) {
 function removeFromCart(id) {
     // 1. Loop for to the array products to get the item to add to cart
     // 2. Add found product to the cartList array
-
+    
 
 }
 
