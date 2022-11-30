@@ -1,10 +1,6 @@
 
 // Exercise 7
-var inputs = document.getElementsByClassName("form-control");
-var element;
-for (element in inputs){
-	element.classList.add('required');
-}
+
 function validate() {
 	var error = 0;
 	// Get the input fields
