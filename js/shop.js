@@ -2,7 +2,7 @@
 var products = [
    {
         id: 1,
-        name: 'cooking oil',
+        name: 'Cooking Oil',
         price: 10.5,
         type: 'grocery',
         offer: {
@@ -76,6 +76,9 @@ function buy(id) {
     var item = products.find((product) =>product.id === id);
     cartList.push(item);
     console.log(cartList);
+
+    document.getElementById("count_product").innerHTML= cartList.length;
+    generateCart();
     // 1. Loop for to the array products to get the item to add to cart
     // 2. Add found product to the cartList array
 }
@@ -84,8 +87,12 @@ function buy(id) {
 function cleanCart() {
     while (cartList.length > 0) {
         cartList.pop();
+        cart=[];
+        total= 0;
     }
     console.log(cartList);
+
+    printCart();
 }
 
 // Exercise 3
@@ -96,6 +103,7 @@ function calculateTotal() {
         total += precio;
     }
     console.log(total);
+
 }
 
 // Exercise 4
@@ -110,8 +118,8 @@ function generateCart() {
     }, {});
 
     cart = Object.values(itemIdQuantityMap);
-    
     console.log(cart);
+    applyPromotionsCart();
     // Using the "cartlist" array that contains all the items in the shopping cart, 
     // generate the "cart" array that does not contain repeated items, instead each item of this array "cart" shows the quantity of product.
 }
@@ -121,16 +129,20 @@ function generateCart() {
 function applyPromotionsCart() {
    for (var i = 0; i < cart.length; i ++) {
         const precio = cart[i].price;
-        const oferta = cart[i].offer.percent;
         const cantidad = cart[i].quantity;
-        const descuento = ((precio * cantidad) - precio * cantidad * oferta /100);
-        if(cart[i].id ==1 && cart[i].quantity >=3){
 
+        if(cart[i].id ==1 && cart[i].quantity >=3){
+            let oferta = cart[i].offer.percent;
+            let descuento = ((precio * cantidad) - precio * cantidad * oferta /100);
+            
             cart[i].subtotalWithDiscount = descuento;
 
         }else if (cart[i].id == 3 && cart[i].quantity >=10){
-
+            let oferta = cart[i].offer.percent;
+            let descuento = ((precio * cantidad) - precio * cantidad * oferta /100);
             cart[i].subtotalWithDiscount = descuento;
+        }else{
+            cart[i].subtotal = cantidad * precio;
         }
 
     }
@@ -140,10 +152,59 @@ function applyPromotionsCart() {
 
 // Exercise 6
 function printCart() {
+    var cartListHtml = "";
+    var total = 0;
+    if(cart.length == 0){
+        document.getElementById("count_product").innerHTML= "0";
+        cartListHtml = `
+
+        <td colspan="4" class=" text-center px-5 py-3">
+            <h3>Your Cart Is Currently Empty!</h3>
+        </td>
+        
+        `;
+        document.getElementById("total_price").innerHTML= total;
+    }else{
+        cart.forEach(function (product){
+            var producto = product.name;
+            var precio = product.price;
+            var cantidad = product.quantity;
+
+            if(product.offer){
+                let totalDiscounted = product.subtotalWithDiscount;
+                cartListHtml += `
+                <tr>
+                    <th scope="row">${producto}</th>
+                    <td>${precio}</td>
+                    <td>${cantidad}</td>
+                    <td>${totalDiscounted}</td>
+                </tr>
+                `
+                total += totalDiscounted;
+
+            }else if (product.subtotal){
+                let subtotal = product.subtotal;
+                cartListHtml += `
+                <tr>
+                    <th scope="row">${producto}</th>
+                    <td>${precio}</td>
+                    <td>${cantidad}</td>
+                    <td>${subtotal}</td>
+                </tr>
+             `
+                total += subtotal;
+                
+            }else {
+                console.log("No funciona");
+            }
+        
+        });
+
+        document.getElementById("cart_list").innerHTML= cartListHtml;
+        document.getElementById("total_price").innerHTML= total;
+    }
     // Fill the shopping cart modal manipulating the shopping cart dom
 }
-
-
 // ** Nivell II **
 
 // Exercise 7
