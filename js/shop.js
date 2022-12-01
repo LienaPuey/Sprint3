@@ -68,7 +68,7 @@ var cartList = [];
 
 // Improved version of cartList. Cart is an array of products (objects), but each one has a quantity field to define its quantity, so these products are not repeated.
 var cart = [];
-
+var contador = 0;
 var total = 0;
 
 // Exercise 1
@@ -88,6 +88,7 @@ function cleanCart() {
     while (cart.length > 0) {
         cart.pop();
         total= 0;
+        contador=0;
     }
     console.log(cart);
 
@@ -179,7 +180,7 @@ function printCart() {
                     <td>${precio}</td>
                     <td>${cantidad}</td>
                     <td>$${totalDiscounted}</td>
-                    <td><svg role="button" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
+                    <td><svg role="button" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16" onclick="removeFromCart(id)">
                     <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/>
                     <path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"/>
                   </svg></td>
@@ -195,7 +196,7 @@ function printCart() {
                     <td>${precio}</td>
                     <td>${cantidad}</td>
                     <td>$${subtotal}</td>
-                    <td><svg role="button" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
+                    <td><svg role="button" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16" onclick="removeFromCart(id)">
                     <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/>
                     <path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"/>
                   </svg></td>
@@ -222,18 +223,20 @@ function addToCart(id) {
     var item = products.find((product) =>product.id === id);
     if (cart.length == 0){
         cart.push({...item, quantity: 1});
+        contador ++;
     }else {
         var elemento = cart.find((product)=> product.id === item.id);
         if(elemento != undefined){
             elemento.quantity +=1;
+            contador++;
         }else{
             cart.push({...item, quantity:1});
+           contador++;
         }
     }
     applyPromotionsCart();
-    document.getElementById("count_product").innerHTML;//cambiar el counter
+    document.getElementById("count_product").innerHTML = contador;
 
-    
     console.log(cart);
 }
 
@@ -243,7 +246,6 @@ function addToCart(id) {
 function removeFromCart(id) {
     // 1. Loop for to the array products to get the item to add to cart
     // 2. Add found product to the cartList array
-    
 
 }
 
