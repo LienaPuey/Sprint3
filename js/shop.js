@@ -127,24 +127,23 @@ function generateCart() {
 
 // Exercise 5
 function applyPromotionsCart() {
-   for (var i = 0; i < cart.length; i ++) {
+
+    for(let i = 0; i < cart.length; i++){
         const precio = cart[i].price;
         const cantidad = cart[i].quantity;
+        cart[i].subtotal = precio * cantidad;
 
-        if(cart[i].id ==1 && cart[i].quantity >=3){
-            let oferta = cart[i].offer.percent;
-            let descuento = ((precio * cantidad) - precio * cantidad * oferta /100);
-            
-            cart[i].subtotalWithDiscount = descuento;
-
-        }else if (cart[i].id == 3 && cart[i].quantity >=10){
-            let oferta = cart[i].offer.percent;
-            let descuento = ((precio * cantidad) - precio * cantidad * oferta /100);
-            cart[i].subtotalWithDiscount = descuento;
-        }else{
-            cart[i].subtotal = cantidad * precio;
+        if (cart[i].offer !== undefined){
+            if (cantidad >= cart[i].offer.number){
+                const oferta = cart[i].offer.percent;
+                
+                cart[i].subtotalWithDiscount = ((precio * cantidad) - precio * cantidad * oferta /100);
+            }else{
+                cart[i].subtotalWithDiscount = cart[i].subtotal;
+            }
+        }else {
+            cart[i].subtotalWithDiscount = cart[i].subtotal;
         }
-
     }
     console.log(cart);
     // Apply promotions to each item in the array "cart"
@@ -167,46 +166,28 @@ function printCart() {
         `;
         document.getElementById("total_price").innerHTML= total;
     }else{
-        cart.forEach(function (product){
-            var producto = product.name;
-            var precio = product.price;
-            var cantidad = product.quantity;
 
-            if(product.subtotalWithDiscount){
-                let totalDiscounted = product.subtotalWithDiscount;
-                cartListHtml += `
+        for(let i = 0; i < cart.length; i++){
+            var producto = cart[i].name;
+            var precio = cart[i].price;
+            var cantidad = cart[i].quantity;
+            var totalDiscounted = cart[i].subtotalWithDiscount;
+            cartListHtml += `
                 <tr>
                     <th scope="row">${producto}</th>
                     <td>${precio}</td>
                     <td>${cantidad}</td>
                     <td>$${totalDiscounted}</td>
-                    <td><svg role="button" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16" onclick="removeFromCart(id)">
+                    <td><svg role="button" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16" onclick="removeFromCart(${cart[i].id})">
                     <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/>
                     <path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"/>
                   </svg></td>
                 </tr>
                 `;
-                total += totalDiscounted;
 
-            }else if (product.subtotal){
-                let subtotal = product.subtotal;
-                cartListHtml += `
-                <tr>
-                    <th scope="row">${producto}</th>
-                    <td>${precio}</td>
-                    <td>${cantidad}</td>
-                    <td>$${subtotal}</td>
-                    <td><svg role="button" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16" onclick="removeFromCart(id)">
-                    <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/>
-                    <path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"/>
-                  </svg></td>
-                </tr>
-             `;
-                total += subtotal;
-                
-            }
-        
-        });
+              total += totalDiscounted;
+
+        }
 
         document.getElementById("cart_list").innerHTML= cartListHtml;
         document.getElementById("total_price").innerHTML= total;
@@ -246,7 +227,20 @@ function addToCart(id) {
 function removeFromCart(id) {
     // 1. Loop for to the array products to get the item to add to cart
     // 2. Add found product to the cartList array
+    const producto = cart.find(item => item.id === id);
+    console.log(producto);
 
+    if(producto.quantity > 1){
+        producto.quantity--;
+        contador.innerHTML--;
+        applyPromotionsCart();
+        printCart();
+    }else{
+        cart.splice(producto);
+        contador.innerHTML--;
+        applyPromotionsCart();
+        printCart();
+    }
 }
 
 function open_modal(){
