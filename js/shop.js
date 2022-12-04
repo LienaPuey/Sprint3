@@ -236,7 +236,7 @@ function removeFromCart(id) {
         applyPromotionsCart();
         printCart();
     }else{
-        cart.splice(producto);
+        cart.splice(producto, 1);
         contador.innerHTML--;
         applyPromotionsCart();
         printCart();
