@@ -228,18 +228,18 @@ function removeFromCart(id) {
     // 1. Loop for to the array products to get the item to add to cart
     // 2. Add found product to the cartList array
     const producto = cart.find(item => item.id === id);
-
     if(producto.quantity > 1){
         producto.quantity--;
-        contador.innerHTML--;
+        contador--;
         applyPromotionsCart();
         printCart();
     }else{
         cart.splice(producto, 1);
-        contador.innerHTML--;
+        contador--;
         applyPromotionsCart();
         printCart();
     }
+    document.getElementById("count_product").innerHTML = contador;
 }
 
 function open_modal(){
